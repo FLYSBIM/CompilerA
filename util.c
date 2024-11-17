@@ -226,6 +226,28 @@ void printTree( TreeNode * tree )
           break;
       }
     }
+    else if (tree->nodekind==DeclK)
+    { switch (tree->kind.decl) {
+        case FuncK:
+	  fprintf(listing,"Function Declaration: name = %s, return type = %s\n",tree->attr.name);
+	  break;
+	case VarK:
+	  fprintf(listing,"Var Dec: %s\n",tree->attr.name);
+	  break;
+	case ArrVarK:
+	  fprintf(listing,"Var Dec(following const:array length): %s %d\n",tree->attr)
+	  break;
+	default:
+	  fprintf(listing,"Unknown DeclNode kind\n");
+	  break;
+      }
+    }
+    else if (tree->nodekind==TypK)
+    { switch (tree->kind.type) {
+	case Typ
+      }
+    }
+
     else fprintf(listing,"Unknown node kind\n");
     for (i=0;i<MAXCHILDREN;i++)
          printTree(tree->child[i]);

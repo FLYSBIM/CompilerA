@@ -33,6 +33,11 @@ char * copyString( char * );
  */
 void printTree( TreeNode * );
 
-TreeNode * newDeclNode(Declkind);
+TreeNode * newDeclNode(DeclKind);
+
+TreeNode * newParaNode(ParaKind);
+
+TreeNode * newTypeNode(TypeKind);
+
 
 #endif

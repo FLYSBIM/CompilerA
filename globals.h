@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include "y.tab.h"
 
 #ifndef FALSE
 #define FALSE 0
@@ -38,8 +39,8 @@ extern int lineno; /* source line number for listing */
 /**************************************************/
 
 typedef enum {StmtK,ExpK,TypK,ParaK,DeclK} NodeKind;
-typedef enum {IfK,IterK,RetuK} StmtKind;
-typedef enum {AssignK,OpK,ConstK,IdK,ArrIdk,Callk} ExpKind;
+typedef enum {IfK,IterK,RetuK,CompK} StmtKind;
+typedef enum {AssignK,OpK,ConstK,IdK,ArrIdK,CallK} ExpKind;
 typedef enum {TypeK} TypeKind;
 typedef enum {ArrParaK,NonArrParaK} ParaKind;
 typedef enum {VarK,ArrVarK,FunK} DeclKind;
@@ -49,6 +50,13 @@ typedef enum {Void,Integer,Boolean} ExpType;
 
 #define MAXCHILDREN 3
 
+typedef struct ArrAtt
+{
+        int size;
+        char * name;
+}ArrAtt;
+
+
 typedef struct treeNode
    { struct treeNode * child[MAXCHILDREN];
      struct treeNode * sibling;
@@ -56,8 +64,10 @@ typedef struct treeNode
      NodeKind nodekind;
      union { StmtKind stmt; ExpKind exp; DeclKind decl; ParaKind para; TypeKind type;} kind;
      union { TokenType op;
+	     TokenType type;
              int val;
-             char * name; } attr;
+             char * name; 
+     	     ArrAtt arr; } attr;
      ExpType type; /* for type checking of exps */
    } TreeNode;
 

@@ -8,24 +8,15 @@
 
 #include "globals.h"
 #include "util.h"
+#include "y.tab.h"
 
 /* Procedure printToken prints a token 
  * and its lexeme to the listing file
  */
-void printToken( TokenType token, const char* tokenString )
+void printToken(TokenType token, const char* tokenString )
 { 
-//  fprintf(listing, "%d: ",lineno);	
   switch (token)
-  { /*
-    case IF:
-    case THEN:
-    case ELSE:
-    case END:
-    case REPEAT:
-    case UNTIL:
-    case READ:
-    case WRITE:
-    */
+  { 
     case IF:
     case ELSE:
     case WHILE:
@@ -36,16 +27,6 @@ void printToken( TokenType token, const char* tokenString )
          "reserved word: %s\n",tokenString);
       break;
     
-    /*case ASSIGN: fprintf(listing,":=\n"); break;
-    case LT: fprintf(listing,"<\n"); break;
-    case EQ: fprintf(listing,"=\n"); break;
-    case LPAREN: fprintf(listing,"(\n"); break;
-    case RPAREN: fprintf(listing,")\n"); break;
-    case SEMI: fprintf(listing,";\n"); break;
-    case PLUS: fprintf(listing,"+\n"); break;
-    case MINUS: fprintf(listing,"-\n"); break;
-    case TIMES: fprintf(listing,"*\n"); break;
-    case OVER: fprintf(listing,"/\n"); break;*/
     case ASSIGN: fprintf(listing, "=\n"); break;
     case EQ: fprintf(listing, "==\n"); break;
     case NE: fprintf(listing, "!=\n"); break;
@@ -117,6 +98,52 @@ TreeNode * newExpNode(ExpKind kind)
     t->kind.exp = kind;
     t->lineno = lineno;
     t->type = Void;
+  }
+  return t;
+}
+
+TreeNode * newDeclNode(DeclKind kind) 
+{ TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
+  int i;
+  if (t == NULL)
+    fprintf(listing, "Out of memory error at line %d\n",lineno);
+  else {
+    for (i = 0; i < MAXCHILDREN; i++) t->child[i] = NULL;
+    t->sibling = NULL;
+    t->nodekind = DeclK;
+    t->kind.decl = kind;
+    t->lineno = lineno;
+    t->type=Void;
+  }
+  return t;
+}
+
+TreeNode * newParaNode(ParaKind kind)
+{ TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
+  int i;
+  if (t==NULL)
+    fprintf(listing,"Out of memory error at line %d\n",lineno);
+  else {
+    for (i=0;i<MAXCHILDREN;i++) t->child[i] = NULL;
+    t->sibling = NULL;
+    t->nodekind = ParaK;
+    t->kind.param = kind;
+    t->lineno = lineno;
+  }
+  return t;
+}
+
+TreeNode * newTypeNode(TypeKind kind)
+{ TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
+  int i;
+  if (t==NULL)
+    fprintf(listing,"Out of memory error at line %d\n",lineno);
+  else {
+    for (i=0;i<MAXCHILDREN;i++) t->child[i] = NULL;
+    t->sibling = NULL;
+    t->nodekind = TypK;
+    t->kind.type = kind;
+    t->lineno = lineno;
   }
   return t;
 }
@@ -199,6 +226,28 @@ void printTree( TreeNode * tree )
           break;
       }
     }
+    else if (tree->nodekind==DeclK)
+    { switch (tree->kind.decl) {
+        case FuncK:
+	  fprintf(listing,"Function Declaration: name = %s, return type = %s\n",tree->attr.name);
+	  break;
+	case VarK:
+	  fprintf(listing,"Var Dec: %s\n",tree->attr.name);
+	  break;
+	case ArrVarK:
+	  fprintf(listing,"Var Dec(following const:array length): %s %d\n",tree->attr)
+	  break;
+	default:
+	  fprintf(listing,"Unknown DeclNode kind\n");
+	  break;
+      }
+    }
+    else if (tree->nodekind==TypK)
+    { switch (tree->kind.type) {
+	case Typ
+      }
+    }
+
     else fprintf(listing,"Unknown node kind\n");
     for (i=0;i<MAXCHILDREN;i++)
          printTree(tree->child[i]);

@@ -1,10 +1,3 @@
-/****************************************************/
-/* File: tiny.l                                     */
-/* Lex specification for TINY                       */
-/* Compiler Construction: Principles and Practice   */
-/* Kenneth C. Louden                                */
-/****************************************************/
-
 %{
 #include "globals.h"
 #include "util.h"
@@ -12,7 +5,7 @@
 /* lexeme of identifier or reserved word */
 char tokenString[MAXTOKENLEN+1];
 %}
-// identifier  {letter}+
+
 digit       [0-9]
 number      {digit}+
 letter      [a-zA-Z]
@@ -22,27 +15,50 @@ whitespace  [ \t]+
 
 %%
 
-"if"            {return IF;}
-"then"          {return THEN;}
-"else"          {return ELSE;}
-"end"           {return END;}
-"repeat"        {return REPEAT;}
-"until"         {return UNTIL;}
-"read"          {return READ;}
-"write"         {return WRITE;}
-/*":="            {return ASSIGN;}
-"="             {return EQ;}
+"/*"            {
+                    char c;
+                    while (1) {
+                        c = input();
+                        if (c == EOF){
+                                break;
+                        }
+                        else if (c == '\n'){
+                                lineno++;
+                        }
+                        else if (c == '*') {
+                            c = input();
+                            if (c == '/') break;
+                        }
+                    }
+                }
+"int"            {return INT;}
+"void"          {return VOID;}
+"if"          {return IF;}
+"else"           {return ELSE;}
+"while"        {return WHILE;}
+"return"         {return RETURN;}
+"=="            {return EQ;}
+"!="             {return NE;}
 "<"             {return LT;}
+"<="             {return LE;}
+">"             {return GT;}
+">="             {return GE;}
+"="             {return ASSIGN;}
 "+"             {return PLUS;}
 "-"             {return MINUS;}
 "*"             {return TIMES;}
 "/"             {return OVER;}
+";"             {return SEMI;}
+","             {return COMMA;}
 "("             {return LPAREN;}
 ")"             {return RPAREN;}
-";"             {return SEMI;}
+"["             {return LBRACE;}
+"]"             {return RBRACE;}
+"{"             {return LCURLY;}
+"}"             {return RCURLY;}
 {number}        {return NUM;}
 {identifier}    {return ID;}
-{newline}       {lineno++;}*/
+{newline}       {lineno++;}
 {whitespace}    {/* skip whitespace */}
 "{"             { char c;
                   do
@@ -54,7 +70,6 @@ whitespace  [ \t]+
 .               {return ERROR;}
 
 %%
-
 TokenType getToken(void)
 { static int firstTime = TRUE;
   TokenType currentToken;

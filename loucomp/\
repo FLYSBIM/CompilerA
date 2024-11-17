@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include "y.tab.h"
 
 #ifndef FALSE
 #define FALSE 0
@@ -25,7 +26,19 @@
 /* MAXRESERVED = the number of reserved words */
 #define MAXRESERVED 6
 /* eight */
-typedef int TokenType;
+
+//typedef enum 
+    /* book-keeping tokens */
+  // {ENDFILE,ERROR,
+    /* reserved words */
+    /* IF,THEN,ELSE,END,REPEAT,UNTIL,READ,WRITE */
+   // IF,ELSE,WHILE,RETURN,INT,VOID,
+    /* multicharacter tokens */
+    //ID,NUM,
+    /* special symbols */
+    /*ASSIGN,EQ,LT,PLUS,MINUS,TIMES,OVER,LPAREN,RPAREN,SEMI*/
+   // ASSIGN,EQ,NE,LT,LE,GT,GE,PLUS,MINUS,TIMES,OVER,LPAREN,RPAREN,LBRACE,RBRACE,LCURLY,RCURLY,SEMI,COMMA
+  // } TokenType;
 
 extern FILE* source; /* source code text file */
 extern FILE* listing; /* listing output text file */
@@ -37,12 +50,10 @@ extern int lineno; /* source line number for listing */
 /***********   Syntax tree for parsing ************/
 /**************************************************/
 
-typedef enum {StmtK,ExpK,TypK,ParaK,DeclK} NodeKind;
-typedef enum {IfK,IterK,RetuK} StmtKind;
-typedef enum {AssignK,OpK,ConstK,IdK,ArrIdk,Callk} ExpKind;
-typedef enum {TypeK} TypeKind;
-typedef enum {ArrParaK,NonArrParaK} ParaKind;
-typedef enum {VarK,ArrVarK,FunK} DeclKind;
+typedef enum {StmtK,ExpK,DeclK} NodeKind;
+typedef enum {IfK,RepeatK,AssignK,ReadK,WriteK} StmtKind;
+typedef enum {OpK,ConstK,IdK} ExpKind;
+typedef enum {VarK,ArrVarK,FunK,ParamK} DeclKind;
 
 /* ExpType is used for type checking */
 typedef enum {Void,Integer,Boolean} ExpType;
@@ -54,7 +65,7 @@ typedef struct treeNode
      struct treeNode * sibling;
      int lineno;
      NodeKind nodekind;
-     union { StmtKind stmt; ExpKind exp; DeclKind decl; ParaKind para; TypeKind type;} kind;
+     union { StmtKind stmt; ExpKind exp; DeclKind decl;} kind;
      union { TokenType op;
              int val;
              char * name; } attr;

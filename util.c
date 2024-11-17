@@ -285,7 +285,7 @@ void printTree( TreeNode * tree )
           break;
       }
     }
-
+///
     else fprintf(listing,"Unknown node kind\n");
     for (i=0;i<MAXCHILDREN;i++)
          printTree(tree->child[i]);

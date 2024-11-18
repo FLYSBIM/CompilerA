@@ -7,9 +7,8 @@
 
 #include "globals.h"
 #include "y.tab.h"
-
 /* set NO_PARSE to TRUE to get a scanner-only compiler */
-#define NO_PARSE FLASE
+#define NO_PARSE FALSE
 /* set NO_ANALYZE to TRUE to get a parser-only compiler */
 #define NO_ANALYZE TRUE
 

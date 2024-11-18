@@ -8,6 +8,7 @@
 #include "globals.h"
 #include "util.h"
 #include "scan.h"
+#include "y.tab.h"
 
 /* states in scanner DFA */
 typedef enum
@@ -56,9 +57,7 @@ static struct
     { char* str;
       TokenType tok;
     } reservedWords[MAXRESERVED]
-   = {/*{"if",IF},{"then",THEN},{"else",ELSE},{"end",END},
-      {"repeat",REPEAT},{"until",UNTIL},{"read",READ},
-      {"write",WRITE}*/
+   = {
    	{"if",IF},
 	{"else",ELSE},
 	{"while",WHILE},

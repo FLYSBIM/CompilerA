@@ -8,6 +8,7 @@
 
 #include "globals.h"
 #include "util.h"
+#include "y.tab.h"
 
 /* Procedure printToken prints a token 
  * and its lexeme to the listing file
@@ -198,7 +199,7 @@ void printTree( TreeNode * tree )
 	  fprintf(listing,"Compound Statement:\n");
 	  break;
         default:
-          fprintf(listing,"Unknown ExpNode kind\n");
+          fprintf(listing,"Unknown StmtNode kind\n");
           break;
       }
     }
@@ -253,7 +254,7 @@ void printTree( TreeNode * tree )
       }
     }
     else if (tree->nodekind==ParaK)
-    { switch (tree->kind.type) {
+    { switch (tree->kind.para) {
 	case ArrParaK:
 	  fprintf(listing,"Parameter: name = %s, type = int[]",tree->attr.name);
 	  break;

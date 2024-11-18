@@ -12,12 +12,14 @@
 #include "scan.h"
 #include "parse.h"
 
-#define YYSTYPE TreeNode *
-static char * savedop;
+#define YYSTYPE TreeNode*
+
+//#define YYSTYPE TreeNode *
 static int savedNumber;
 static char * savedName; /* for use in assignments */
 static int savedLineNo;  /* ditto */
 static TreeNode * savedTree; /* storesgg syntax tree for later return */
+static int yylex(void);
 %}
 
 %token IF ELSE WHILE RETURN VOID INT
@@ -25,7 +27,9 @@ static TreeNode * savedTree; /* storesgg syntax tree for later return */
 %token ASSIGN EQ NE LT LE GT GE PLUS MINUS TIMES OVER LPAREN RPAREN LBRACE RBRACE LCURLY RCURLY SEMI COMMA
 %token ERROR ENDFILE
 
-%nonassoc ELSE
+%left PLUS MINUS
+%left TIMES OVER COMMA
+%right ASSIGN
 
 %% /* Grammar for TINY */
 
@@ -191,14 +195,12 @@ selection_stmt
     { $$ = newStmtNode(IfK);
       $$->child[0] = $3;
       $$->child[1] = $5;
-      $$->lineno = lineno;
     }
     | IF LPAREN expression RPAREN statement ELSE statement
     { $$ = newStmtNode(IfK);
       $$->child[0] = $3;
       $$->child[1] = $5;
       $$->child[2] = $7;
-      $$->lineno = lineno;
     }
     ;
 iteration_stmt
@@ -206,17 +208,16 @@ iteration_stmt
     { $$ = newStmtNode(IterK);
       $$->child[0] = $3;
       $$->child[1] = $5;
-      $$->lineno = lineno;
     }
     ;
 return_stmt
     : RETURN SEMI
     { $$ = newStmtNode(RetuK); 
-      $$->lineno = lineno; }
+      $$->type = Void;
+    }
     | RETURN expression SEMI
     { $$ = newStmtNode(RetuK);
       $$->child[0] = $2;
-      $$->lineno = lineno;
     }
     ;
 expression
@@ -224,7 +225,6 @@ expression
     { $$ = newExpNode(AssignK);
       $$->child[0] = $1;
       $$->child[1] = $3;
-      $$->lineno = lineno;
     }
     | simple_expression
     { $$ = $1; }
@@ -233,13 +233,11 @@ var
     : identifier
     { $$ = newExpNode(IdK);
       $$->attr.name = savedName;
-      $$->lineno = lineno;
     }
     | identifier LBRACE expression RBRACE
     { $$ = newExpNode(ArrIdK);
       $$->attr.name = savedName;
-      $$->child[0] = $3;
-      $$->lineno = lineno;
+      $$->child[0] = $4;
     }
     ;
 simple_expression

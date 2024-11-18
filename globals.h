@@ -13,7 +13,15 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+//
+#ifndef YYPARSER
+
 #include "y.tab.h"
+
+
+#endif
+
+//#define YYSTYPE TreeNode*
 
 #ifndef FALSE
 #define FALSE 0
@@ -23,10 +31,13 @@
 #define TRUE 1
 #endif
 
+//#define YYSTYPE TreeNode* //dwdw
+
 /* MAXRESERVED = the number of reserved words */
 #define MAXRESERVED 6
 /* eight */
 typedef int TokenType;
+//typedef enum yytokentype TokenType;
 
 extern FILE* source; /* source code text file */
 extern FILE* listing; /* listing output text file */

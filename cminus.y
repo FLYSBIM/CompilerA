@@ -18,7 +18,7 @@ static int savedNumber;
 static int savedLineNo;  /* ditto */
 static TreeNode * savedTree; /* stores syntax tree for later return */
 static int yylex(void);
-
+static ExpType savedType;
 %}
 
 /* reserved words */
@@ -55,27 +55,32 @@ saveName    : ID
                  }
             ;
 saveNumber  : NUM
-                 { savedNumber = atoi(tokenString);
+                 { 
+		   $$=newDeclNode(NumK);
+		   savedNumber = atoi(tokenString);
+		   $$->attr.val=savedNumber;
                    savedLineNo = lineno;
                  }
             ;
 var_decl    : type_spec saveName SEMI
                  { $$ = newDeclNode(VarK);
-                   $$->child[0] = $1; /* type */
                    $$->lineno = lineno;
                    $$->attr.name = savedName;
+		   $$->type=$1->type;
                  }
             | type_spec saveName LBRACK saveNumber RBRACK SEMI
                  { $$ = newDeclNode(ArrVarK);
-                   $$->child[0] = $1; /* type */
                    $$->lineno = lineno;
                    $$->attr.arr.name = savedName;
-                   $$->attr.arr.size = savedNumber;
+                   //$$->attr.arr.size = savedNumber;
+		   $$->type=Integer;
+		   $$->child[0]=$4;
                  }
             ;
 type_spec   : INT
                  { $$ = newTypeNode(TypeNameK);
                    $$->attr.type = INT;
+		   $$->type=Integer;
                  }
             | VOID
                  { $$ = newTypeNode(TypeNameK);
@@ -86,13 +91,13 @@ fun_decl    : type_spec saveName {
                    $$ = newDeclNode(FuncK);
                    $$->lineno = lineno;
                    $$->attr.name = savedName;
+		   $$->type=$1->type;
                  }
               LPAREN params RPAREN comp_stmt
                  {
                    $$ = $3;
-                   $$->child[0] = $1; /* type */
-                   $$->child[1] = $5;    /* parameters */
-                   $$->child[2] = $7; /* body */
+                   $$->child[1] = $5;   
+                   $$->child[2] = $7; 
                  }
             ;
 params      : param_list  { $$ = $1; }
@@ -112,14 +117,14 @@ param_list  : param_list COMMA param
             | param { $$ = $1; };
 param       : type_spec saveName
                  { $$ = newParamNode(NonArrParamK);
-                   $$->child[0] = $1;
                    $$->attr.name = savedName;
+		   $$->type=$1->type;
                  }
             | type_spec saveName
               LBRACK RBRACK
                  { $$ = newParamNode(ArrParamK);
-                   $$->child[0] = $1;
                    $$->attr.name = savedName;
+		   $$->type=$1->type;
                  }
             ;
 comp_stmt   : LBRACE local_decls stmt_list RBRACE
@@ -166,7 +171,7 @@ sel_stmt    : IF LPAREN exp RPAREN stmt
                    $$->child[2] = NULL;
                  }
             | IF LPAREN exp RPAREN stmt ELSE stmt
-                 { $$ = newStmtNode(IfK);
+                 { $$ = newStmtNode(IfelseK);
                    $$->child[0] = $3;
                    $$->child[1] = $5;
                    $$->child[2] = $7;
@@ -198,13 +203,14 @@ var         : saveName
                  { $$ = newExpNode(IdK);
                    $$->attr.name = savedName;
                  }
-            | saveName
+            | saveName 
                  { $$ = newExpNode(ArrIdK);
-                   $$->attr.name = savedName;
-                 }
-              LBRACK exp RBRACK
-                 { $$->child[0] = $3;
-                 }
+		   $$->attr.name= savedName;
+		 } LBRACK exp RBRACK
+                 { 
+		   $$=$2;
+		   $$->child[0] = $4;
+		 }
             ;
 simple_exp  : add_exp LTEQ add_exp
                  { $$ = newExpNode(OpK);
@@ -275,9 +281,10 @@ term        : term TIMES factor
 factor      : LPAREN exp RPAREN { $$ = $2; }
             | var { $$ = $1; }
             | call { $$ = $1; }
-            | NUM
-                 { $$ = newExpNode(ConstK);
-                   $$->attr.val = atoi(tokenString);
+            | saveNumber //NUM
+                 { $$=$1;
+		   //$$ = newExpNode(ConstK);
+                   //$$->attr.val = atoi(tokenString);
                  }
             ;
 call        : saveName {

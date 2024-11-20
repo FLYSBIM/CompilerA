@@ -94,7 +94,7 @@ Grammar
    55 factor: LPAREN exp RPAREN
    56       | var
    57       | call
-   58       | NUM
+   58       | saveNumber
 
    59 @3: %empty
 
@@ -118,7 +118,7 @@ Terminals, with rules where they appear
     VOID (262) 11 15
     WHILE (263) 34
     ID (264) 6
-    NUM (265) 7 58
+    NUM (265) 7
     PLUS (266) 49
     MINUS (267) 50
     TIMES (268) 52
@@ -159,7 +159,7 @@ Nonterminals, with rules where they appear
         on right: 8 9 13 18 19 39 41 60
     saveNumber (36)
         on left: 7
-        on right: 9
+        on right: 9 58
     var_decl (37)
         on left: 8 9
         on right: 4 21
@@ -574,13 +574,14 @@ State 37
     RETURN  shift, and go to state 40
     WHILE   shift, and go to state 41
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    SEMI    shift, and go to state 43
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    SEMI    shift, and go to state 42
+    LPAREN  shift, and go to state 43
     LBRACE  shift, and go to state 30
-    RBRACE  shift, and go to state 45
+    RBRACE  shift, and go to state 44
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     comp_stmt   go to state 47
     stmt        go to state 48
     exp_stmt    go to state 49
@@ -619,11 +620,12 @@ State 40
    36         | RETURN . exp SEMI
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
+    NUM     shift, and go to state 16
     SEMI    shift, and go to state 61
-    LPAREN  shift, and go to state 44
+    LPAREN  shift, and go to state 43
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     exp         go to state 62
     var         go to state 54
     simple_exp  go to state 55
@@ -642,27 +644,21 @@ State 41
 
 State 42
 
-   58 factor: NUM .
-
-    $default  reduce using rule 58 (factor)
-
-
-State 43
-
    31 exp_stmt: SEMI .
 
     $default  reduce using rule 31 (exp_stmt)
 
 
-State 44
+State 43
 
    55 factor: LPAREN . exp RPAREN
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     exp         go to state 64
     var         go to state 54
     simple_exp  go to state 55
@@ -672,14 +668,14 @@ State 44
     call        go to state 59
 
 
-State 45
+State 44
 
    20 comp_stmt: LBRACE local_decls stmt_list RBRACE .
 
     $default  reduce using rule 20 (comp_stmt)
 
 
-State 46
+State 45
 
    39 var: saveName .
    41    | saveName . @2 LBRACK exp RBRACK
@@ -691,6 +687,13 @@ State 46
 
     @2  go to state 65
     @3  go to state 66
+
+
+State 46
+
+   58 factor: saveNumber .
+
+    $default  reduce using rule 58 (factor)
 
 
 State 47
@@ -815,10 +818,11 @@ State 60
    33         | IF LPAREN . exp RPAREN stmt ELSE stmt
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     exp         go to state 79
     var         go to state 54
     simple_exp  go to state 55
@@ -847,10 +851,11 @@ State 63
    34 iter_stmt: WHILE LPAREN . exp RPAREN stmt
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     exp         go to state 81
     var         go to state 54
     simple_exp  go to state 55
@@ -893,10 +898,11 @@ State 68
    37 exp: var ASSIGN . exp
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     exp         go to state 85
     var         go to state 54
     simple_exp  go to state 55
@@ -911,14 +917,15 @@ State 69
    49 add_exp: add_exp PLUS . term
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    term      go to state 87
-    factor    go to state 58
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    term        go to state 87
+    factor      go to state 58
+    call        go to state 59
 
 
 State 70
@@ -926,14 +933,15 @@ State 70
    50 add_exp: add_exp MINUS . term
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    term      go to state 88
-    factor    go to state 58
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    term        go to state 88
+    factor      go to state 58
+    call        go to state 59
 
 
 State 71
@@ -941,15 +949,16 @@ State 71
    43 simple_exp: add_exp LT . add_exp
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    add_exp   go to state 89
-    term      go to state 57
-    factor    go to state 58
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    add_exp     go to state 89
+    term        go to state 57
+    factor      go to state 58
+    call        go to state 59
 
 
 State 72
@@ -957,15 +966,16 @@ State 72
    42 simple_exp: add_exp LTEQ . add_exp
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    add_exp   go to state 90
-    term      go to state 57
-    factor    go to state 58
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    add_exp     go to state 90
+    term        go to state 57
+    factor      go to state 58
+    call        go to state 59
 
 
 State 73
@@ -973,15 +983,16 @@ State 73
    44 simple_exp: add_exp GT . add_exp
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    add_exp   go to state 91
-    term      go to state 57
-    factor    go to state 58
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    add_exp     go to state 91
+    term        go to state 57
+    factor      go to state 58
+    call        go to state 59
 
 
 State 74
@@ -989,15 +1000,16 @@ State 74
    45 simple_exp: add_exp GTEQ . add_exp
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    add_exp   go to state 92
-    term      go to state 57
-    factor    go to state 58
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    add_exp     go to state 92
+    term        go to state 57
+    factor      go to state 58
+    call        go to state 59
 
 
 State 75
@@ -1005,15 +1017,16 @@ State 75
    46 simple_exp: add_exp EQ . add_exp
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    add_exp   go to state 93
-    term      go to state 57
-    factor    go to state 58
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    add_exp     go to state 93
+    term        go to state 57
+    factor      go to state 58
+    call        go to state 59
 
 
 State 76
@@ -1021,15 +1034,16 @@ State 76
    47 simple_exp: add_exp NEQ . add_exp
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    add_exp   go to state 94
-    term      go to state 57
-    factor    go to state 58
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    add_exp     go to state 94
+    term        go to state 57
+    factor      go to state 58
+    call        go to state 59
 
 
 State 77
@@ -1037,13 +1051,14 @@ State 77
    52 term: term TIMES . factor
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    factor    go to state 95
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    factor      go to state 95
+    call        go to state 59
 
 
 State 78
@@ -1051,13 +1066,14 @@ State 78
    53 term: term OVER . factor
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName  go to state 46
-    var       go to state 86
-    factor    go to state 96
-    call      go to state 59
+    saveName    go to state 45
+    saveNumber  go to state 46
+    var         go to state 86
+    factor      go to state 96
+    call        go to state 59
 
 
 State 79
@@ -1094,10 +1110,11 @@ State 83
    41 var: saveName @2 LBRACK . exp RBRACK
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     exp         go to state 99
     var         go to state 54
     simple_exp  go to state 55
@@ -1112,12 +1129,13 @@ State 84
    60 call: saveName @3 LPAREN . args RPAREN
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
     $default  reduce using rule 62 (args)
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     exp         go to state 100
     var         go to state 54
     simple_exp  go to state 55
@@ -1262,12 +1280,13 @@ State 97
     RETURN  shift, and go to state 40
     WHILE   shift, and go to state 41
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    SEMI    shift, and go to state 43
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    SEMI    shift, and go to state 42
+    LPAREN  shift, and go to state 43
     LBRACE  shift, and go to state 30
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     comp_stmt   go to state 47
     stmt        go to state 103
     exp_stmt    go to state 49
@@ -1291,12 +1310,13 @@ State 98
     RETURN  shift, and go to state 40
     WHILE   shift, and go to state 41
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    SEMI    shift, and go to state 43
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    SEMI    shift, and go to state 42
+    LPAREN  shift, and go to state 43
     LBRACE  shift, and go to state 30
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     comp_stmt   go to state 47
     stmt        go to state 104
     exp_stmt    go to state 49
@@ -1380,10 +1400,11 @@ State 107
    63 arg_list: arg_list COMMA . exp
 
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    LPAREN  shift, and go to state 43
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     exp         go to state 109
     var         go to state 54
     simple_exp  go to state 55
@@ -1401,12 +1422,13 @@ State 108
     RETURN  shift, and go to state 40
     WHILE   shift, and go to state 41
     ID      shift, and go to state 11
-    NUM     shift, and go to state 42
-    SEMI    shift, and go to state 43
-    LPAREN  shift, and go to state 44
+    NUM     shift, and go to state 16
+    SEMI    shift, and go to state 42
+    LPAREN  shift, and go to state 43
     LBRACE  shift, and go to state 30
 
-    saveName    go to state 46
+    saveName    go to state 45
+    saveNumber  go to state 46
     comp_stmt   go to state 47
     stmt        go to state 110
     exp_stmt    go to state 49

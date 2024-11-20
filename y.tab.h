@@ -54,33 +54,33 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    IF = 258,                      /* IF  */
-    ELSE = 259,                    /* ELSE  */
-    WHILE = 260,                   /* WHILE  */
+    ELSE = 258,                    /* ELSE  */
+    IF = 259,                      /* IF  */
+    INT = 260,                     /* INT  */
     RETURN = 261,                  /* RETURN  */
     VOID = 262,                    /* VOID  */
-    INT = 263,                     /* INT  */
+    WHILE = 263,                   /* WHILE  */
     ID = 264,                      /* ID  */
     NUM = 265,                     /* NUM  */
-    ASSIGN = 266,                  /* ASSIGN  */
-    EQ = 267,                      /* EQ  */
-    NE = 268,                      /* NE  */
-    LT = 269,                      /* LT  */
-    LE = 270,                      /* LE  */
-    GT = 271,                      /* GT  */
-    GE = 272,                      /* GE  */
-    PLUS = 273,                    /* PLUS  */
-    MINUS = 274,                   /* MINUS  */
-    TIMES = 275,                   /* TIMES  */
-    OVER = 276,                    /* OVER  */
-    LPAREN = 277,                  /* LPAREN  */
-    RPAREN = 278,                  /* RPAREN  */
-    LBRACE = 279,                  /* LBRACE  */
-    RBRACE = 280,                  /* RBRACE  */
-    LCURLY = 281,                  /* LCURLY  */
-    RCURLY = 282,                  /* RCURLY  */
-    SEMI = 283,                    /* SEMI  */
-    COMMA = 284,                   /* COMMA  */
+    PLUS = 266,                    /* PLUS  */
+    MINUS = 267,                   /* MINUS  */
+    TIMES = 268,                   /* TIMES  */
+    OVER = 269,                    /* OVER  */
+    LT = 270,                      /* LT  */
+    LTEQ = 271,                    /* LTEQ  */
+    GT = 272,                      /* GT  */
+    GTEQ = 273,                    /* GTEQ  */
+    EQ = 274,                      /* EQ  */
+    NEQ = 275,                     /* NEQ  */
+    ASSIGN = 276,                  /* ASSIGN  */
+    SEMI = 277,                    /* SEMI  */
+    COMMA = 278,                   /* COMMA  */
+    LPAREN = 279,                  /* LPAREN  */
+    RPAREN = 280,                  /* RPAREN  */
+    LBRACK = 281,                  /* LBRACK  */
+    RBRACK = 282,                  /* RBRACK  */
+    LBRACE = 283,                  /* LBRACE  */
+    RBRACE = 284,                  /* RBRACE  */
     ERROR = 285                    /* ERROR  */
   };
   typedef enum yytokentype yytoken_kind_t;
@@ -90,33 +90,33 @@ extern int yydebug;
 #define YYEOF 0
 #define YYerror 256
 #define YYUNDEF 257
-#define IF 258
-#define ELSE 259
-#define WHILE 260
+#define ELSE 258
+#define IF 259
+#define INT 260
 #define RETURN 261
 #define VOID 262
-#define INT 263
+#define WHILE 263
 #define ID 264
 #define NUM 265
-#define ASSIGN 266
-#define EQ 267
-#define NE 268
-#define LT 269
-#define LE 270
-#define GT 271
-#define GE 272
-#define PLUS 273
-#define MINUS 274
-#define TIMES 275
-#define OVER 276
-#define LPAREN 277
-#define RPAREN 278
-#define LBRACE 279
-#define RBRACE 280
-#define LCURLY 281
-#define RCURLY 282
-#define SEMI 283
-#define COMMA 284
+#define PLUS 266
+#define MINUS 267
+#define TIMES 268
+#define OVER 269
+#define LT 270
+#define LTEQ 271
+#define GT 272
+#define GTEQ 273
+#define EQ 274
+#define NEQ 275
+#define ASSIGN 276
+#define SEMI 277
+#define COMMA 278
+#define LPAREN 279
+#define RPAREN 280
+#define LBRACK 281
+#define RBRACK 282
+#define LBRACE 283
+#define RBRACE 284
 #define ERROR 285
 
 /* Value type.  */

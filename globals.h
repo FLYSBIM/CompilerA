@@ -1,5 +1,6 @@
 /****************************************************/
 /* File: globals.h                                  */
+/* Yacc/Bison Version                               */
 /* Global types and vars for TINY compiler          */
 /* must come before other include files             */
 /* Compiler Construction: Principles and Practice   */
@@ -14,9 +15,25 @@
 #include <ctype.h>
 #include <string.h>
 
+/* Yacc/Bison generates internally its own values
+ * for the tokens. Other files can access these values
+ * by including the tab.h file generated using the
+ * Yacc/Bison option -d ("generate header")
+ *
+ * The YYPARSER flag prevents inclusion of the tab.h
+ * into the Yacc/Bison output itself
+ */
+
 #ifndef YYPARSER
+
+/* the name of the following file may change */
 #include "y.tab.h"
+
+/* ENDFILE is implicitly defined by Yacc/Bison,
+ * and not included in the tab.h file
+ */
 #define ENDFILE 0
+
 #endif
 
 #ifndef FALSE
@@ -27,13 +44,13 @@
 #define TRUE 1
 #endif
 
-//#define YYSTYPE TreeNode* //dwdw
-
 /* MAXRESERVED = the number of reserved words */
 #define MAXRESERVED 6
-/* eight */
+
+/* Yacc/Bison generates its own integer values
+ * for tokens
+ */
 typedef int TokenType;
-//typedef enum yytokentype TokenType;
 
 extern FILE* source; /* source code text file */
 extern FILE* listing; /* listing output text file */
@@ -45,42 +62,45 @@ extern int lineno; /* source line number for listing */
 /***********   Syntax tree for parsing ************/
 /**************************************************/
 
-typedef enum {StmtK,ExpK,TypK,ParaK,DeclK} NodeKind;
-typedef enum {IfK,IterK,RetuK,CompK} StmtKind;
+typedef enum {StmtK,ExpK,DeclK,ParamK,TypeK} NodeKind;
+typedef enum {CompK,IfK,IterK,RetK} StmtKind;
 typedef enum {AssignK,OpK,ConstK,IdK,ArrIdK,CallK} ExpKind;
-typedef enum {TypeK} TypeKind;
-typedef enum {ArrParaK,NonArrParaK} ParaKind;
-typedef enum {VarK,ArrVarK,FunK} DeclKind;
+typedef enum {FuncK,VarK,ArrVarK} DeclKind;
+typedef enum {ArrParamK,NonArrParamK} ParamKind;
+typedef enum {TypeNameK} TypeKind;
+
+/* ArrayAttr is used for attributes for array variables */
+typedef struct arrayAttr {
+    TokenType type;
+    char * name;
+    int size;
+} ArrayAttr;
 
 /* ExpType is used for type checking */
-typedef enum {Void,Integer,IntegerArray} ExpType;
+typedef enum {Void,Integer,Boolean, IntegerArray} ExpType;
 
 #define MAXCHILDREN 3
 
-typedef struct ArrAtt
-{
-	TokenType type;
-        int size;
-        char * name;
-}ArrAtt;
-
+struct ScopeRec;
 
 typedef struct treeNode
    { struct treeNode * child[MAXCHILDREN];
      struct treeNode * sibling;
      int lineno;
      NodeKind nodekind;
-     union { StmtKind stmt; 
-	     ExpKind exp; 
-	     DeclKind decl; 
-	     ParaKind para; 
-	     TypeKind type;} kind;
+     union { StmtKind stmt;
+             ExpKind exp;
+             DeclKind decl;
+             ParamKind param;
+             TypeKind type; } kind;
      union { TokenType op;
-	     TokenType type;
+             TokenType type;
              int val;
-             char * name; 
-     	     ArrAtt arr; } attr;
+             char * name;
+             ArrayAttr arr;
+             struct ScopeRec * scope; } attr;
      ExpType type; /* for type checking of exps */
+     TokenType ty;
    } TreeNode;
 
 /**************************************************/
@@ -116,5 +136,6 @@ extern int TraceAnalyze;
 extern int TraceCode;
 
 /* Error = TRUE prevents further passes if an error occurs */
-extern int Error; 
+extern int Error;
 #endif
+//other

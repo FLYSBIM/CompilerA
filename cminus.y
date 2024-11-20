@@ -13,23 +13,19 @@
 #include "parse.h"
 
 #define YYSTYPE TreeNode*
-
-//#define YYSTYPE TreeNode *
 static int savedNumber;
 static char * savedName; /* for use in assignments */
 static int savedLineNo;  /* ditto */
 static TreeNode * savedTree; /* storesgg syntax tree for later return */
 static int yylex(void);
+int yyerror(char* message);
 %}
 
 %token IF ELSE WHILE RETURN VOID INT
 %token ID NUM 
 %token ASSIGN EQ NE LT LE GT GE PLUS MINUS TIMES OVER LPAREN RPAREN LBRACE RBRACE LCURLY RCURLY SEMI COMMA
-%token ERROR ENDFILE
+%token ERROR
 
-%left PLUS MINUS
-%left TIMES OVER COMMA
-%right ASSIGN
 
 %% /* Grammar for TINY */
 
@@ -71,7 +67,7 @@ number
 var_declaration
     : type_specifier identifier SEMI
     { $$ = newDeclNode(VarK);
-      $$->type = $1->type;
+      $$->type=$1->type;
       $$->lineno = lineno;
       $$->attr.name = savedName;
     }
@@ -85,23 +81,24 @@ var_declaration
     ;
 type_specifier
     : INT
-    { $$ = newTypeNode(TypeK);
+    {
       $$->type = Integer;
     }
     | VOID
-    { $$ = newTypeNode(TypeK);
+    {
       $$->type = Void;
     }
     ;
 fun_declaration
-    : type_specifier identifier LPAREN params RPAREN compound_stmt
+    : type_specifier identifier
     { $$ = newDeclNode(FunK);
-      $$->lineno = $2->lineno;
-      $$->type = $1->type;
+      $$->lineno = lineno;
       $$->attr.name = savedName;
-      $$->child[0] = $1;
-      $$->child[1] = $4;
-      $$->child[2] = $6;
+    } LPAREN params RPAREN compound_stmt{
+      $$ = $3;
+      $$->type=$1->type;
+      $$->child[0] = $5;
+      $$->child[1] = $7;
     }
     ;
 params
@@ -128,15 +125,15 @@ param_list
 param
     : type_specifier identifier
     { $$ = newParaNode(NonArrParaK);
+      //$$->child[0] = $1;
       $$->type = $1->type;
       $$->attr.name = savedName;
-      $$->lineno = $2->lineno;
     }
     | type_specifier identifier LBRACE RBRACE
     { $$ = newParaNode(ArrParaK);
+     // $$->child[0] = $1;
       $$->type = $1->type;
       $$->attr.name = savedName;
-      $$->lineno = $2->lineno;
     }
     ;
 compound_stmt
@@ -159,7 +156,7 @@ local_declarations
     | /* empty */
     { $$ = NULL; }
     ;
-statement_list
+statement_list 
     : statement_list statement
     { YYSTYPE t = $1;
       if(t != NULL)
@@ -234,40 +231,37 @@ var
     { $$ = newExpNode(IdK);
       $$->attr.name = savedName;
     }
-    | identifier LBRACE expression RBRACE
+    | identifier
     { $$ = newExpNode(ArrIdK);
       $$->attr.name = savedName;
+    } LBRACE expression RBRACE{
+      $$=$2;
       $$->child[0] = $4;
     }
     ;
 simple_expression
     : additive_expression relop additive_expression
-    { $$->child[0] = $1;
-      $$->child[1] = $2;
-      $$->child[2] = $3;
+    { $$=newExpNode(OpK);
+      $$->attr.op=$2->attr.op;
+      $$->child[0] = $1;
+      $$->child[1] = $3;
     }
     | additive_expression
     { $$ = $1; }
     ;
 relop
     : LT
-    { $$ = newExpNode(OpK);
-      $$->attr.op= LT; }
+    { $$->attr.op= LT; }
     | LE
-    { $$ = newExpNode(OpK);
-      $$->attr.op= LE; }
+    { $$->attr.op= LE; }
     | GT
-    { $$ = newExpNode(OpK);
-      $$->attr.op= GT; }
+    { $$->attr.op= GT; }
     | GE
-    { $$ = newExpNode(OpK);
-      $$->attr.op= GE; }
+    { $$->attr.op= GE; }
     | EQ
-    { $$ = newExpNode(OpK);
-      $$->attr.op= EQ; }
+    { $$->attr.op= EQ; }
     | NE
-    { $$ = newExpNode(OpK);
-      $$->attr.op= NE; }
+    { $$->attr.op= NE; }
     ;
 additive_expression
     : additive_expression addop term
@@ -281,11 +275,9 @@ additive_expression
     ;
 addop
     : PLUS
-    { $$ = newExpNode(OpK);
-      $$->attr.op = PLUS; }
+    { $$->attr.op = PLUS; }
     | MINUS
-    { $$ = newExpNode(OpK);
-      $$->attr.op = MINUS; }
+    { $$->attr.op = MINUS; }
     ;
 term
     : term mulop factor
@@ -299,11 +291,9 @@ term
     ;
 mulop
     : TIMES
-    { $$ = newExpNode(OpK);
-      $$->attr.op = TIMES; }
+    { $$->attr.op = TIMES; }
     | OVER
-    { $$ = newExpNode(OpK);
-      $$->attr.op = OVER; }
+    { $$->attr.op = OVER; }
     ;
 factor
     : LPAREN expression RPAREN
@@ -318,10 +308,12 @@ factor
     { $$ = $1; }
     ;
 call
-    : identifier LPAREN args RPAREN
+    : identifier
     { $$ = newExpNode(CallK);
       $$->attr.name = savedName;
-      $$->child[0] = $3;
+    } LPAREN args RPAREN{
+      $$ = $2;
+      $$->child[0] = $4;
     }
     ;
 args

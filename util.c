@@ -247,7 +247,7 @@ void printTree( TreeNode * tree )
 	case ArrVarK: //v
 	  fprintf(listing,"Variable Declaration: name = %s type = int[]\n",tree->attr.name);
 	  fprintf(listing,"int[]\n");
-	  break;
+	  break; 
 	default:
 	  fprintf(listing,"Unknown DeclNode kind\n");
 	  break;
@@ -265,7 +265,7 @@ void printTree( TreeNode * tree )
 	  else if(tree->type==Void){
 		fprintf(listing,"Void Parameter\n");
 	  }
-	  break;
+	  break; 
 	default:
           fprintf(listing,"Unknown ParaNode kind\n");
           break;
@@ -286,7 +286,6 @@ void printTree( TreeNode * tree )
           break;
       }
     }
-///
     else fprintf(listing,"Unknown node kind\n");
     for (i=0;i<MAXCHILDREN;i++)
          printTree(tree->child[i]);

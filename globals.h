@@ -13,15 +13,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-//
+
 #ifndef YYPARSER
-
 #include "y.tab.h"
-
-
+#define ENDFILE 0
 #endif
-
-//#define YYSTYPE TreeNode*
 
 #ifndef FALSE
 #define FALSE 0
@@ -57,12 +53,13 @@ typedef enum {ArrParaK,NonArrParaK} ParaKind;
 typedef enum {VarK,ArrVarK,FunK} DeclKind;
 
 /* ExpType is used for type checking */
-typedef enum {Void,Integer,Boolean} ExpType;
+typedef enum {Void,Integer,IntegerArray} ExpType;
 
 #define MAXCHILDREN 3
 
 typedef struct ArrAtt
 {
+	TokenType type;
         int size;
         char * name;
 }ArrAtt;
@@ -73,7 +70,11 @@ typedef struct treeNode
      struct treeNode * sibling;
      int lineno;
      NodeKind nodekind;
-     union { StmtKind stmt; ExpKind exp; DeclKind decl; ParaKind para; TypeKind type;} kind;
+     union { StmtKind stmt; 
+	     ExpKind exp; 
+	     DeclKind decl; 
+	     ParaKind para; 
+	     TypeKind type;} kind;
      union { TokenType op;
 	     TokenType type;
              int val;

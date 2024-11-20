@@ -205,11 +205,13 @@ TreeNode * factor(void)
 /* Function parse returns the newly 
  * constructed syntax tree
  */
+
 TreeNode * parse(void)
 { TreeNode * t;
-  token = getToken();
-  t = stmt_sequence();
-  if (token!=ENDFILE)
-    syntaxError("Code ends before file\n");
-  return t;
+  //token = getToken();
+  //t = stmt_sequence();
+  //if (token!=ENDFILE)
+  //  syntaxError("Code ends before file\n");
+  //return t;
 }
+

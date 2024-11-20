@@ -81,8 +81,7 @@ extern int yydebug;
     RCURLY = 282,                  /* RCURLY  */
     SEMI = 283,                    /* SEMI  */
     COMMA = 284,                   /* COMMA  */
-    ERROR = 285,                   /* ERROR  */
-    ENDFILE = 286                  /* ENDFILE  */
+    ERROR = 285                    /* ERROR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -119,7 +118,6 @@ extern int yydebug;
 #define SEMI 283
 #define COMMA 284
 #define ERROR 285
-#define ENDFILE 286
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

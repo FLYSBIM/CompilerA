@@ -1,4 +1,4 @@
-# Makefile for C-Minus
+	# Makefile for C-Minus
 #
 # ./lex/tiny.l        --> ./cminus.l (from Project 1)
 # ./yacc/tiny.y       --> ./cminus.y
@@ -41,4 +41,3 @@ y.tab.o: y.tab.c parse.h
 
 y.tab.c: cminus.y
 	yacc -d -v cminus.y
-

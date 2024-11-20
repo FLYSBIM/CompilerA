@@ -479,10 +479,12 @@ char *yytext;
 #include "globals.h"
 #include "util.h"
 #include "scan.h"
+#include "y.tab.h"
+
 /* lexeme of identifier or reserved word */
 char tokenString[MAXTOKENLEN+1];
-#line 485 "lex.yy.c"
-#line 486 "lex.yy.c"
+#line 487 "lex.yy.c"
+#line 488 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -699,10 +701,10 @@ YY_DECL
 		}
 
 	{
-#line 16 "cminus.l"
+#line 18 "cminus.l"
 
 
-#line 706 "lex.yy.c"
+#line 708 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -761,7 +763,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 18 "cminus.l"
+#line 20 "cminus.l"
 {
                     char c;
                     while (1) {
@@ -781,153 +783,153 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 34 "cminus.l"
+#line 36 "cminus.l"
 {return INT;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 35 "cminus.l"
+#line 37 "cminus.l"
 {return VOID;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 36 "cminus.l"
+#line 38 "cminus.l"
 {return IF;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 37 "cminus.l"
+#line 39 "cminus.l"
 {return ELSE;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 38 "cminus.l"
+#line 40 "cminus.l"
 {return WHILE;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 39 "cminus.l"
+#line 41 "cminus.l"
 {return RETURN;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 40 "cminus.l"
+#line 42 "cminus.l"
 {return EQ;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 41 "cminus.l"
+#line 43 "cminus.l"
 {return NE;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 42 "cminus.l"
+#line 44 "cminus.l"
 {return LT;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 43 "cminus.l"
+#line 45 "cminus.l"
 {return LE;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 44 "cminus.l"
+#line 46 "cminus.l"
 {return GT;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 45 "cminus.l"
+#line 47 "cminus.l"
 {return GE;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 46 "cminus.l"
+#line 48 "cminus.l"
 {return ASSIGN;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 47 "cminus.l"
+#line 49 "cminus.l"
 {return PLUS;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 48 "cminus.l"
+#line 50 "cminus.l"
 {return MINUS;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 49 "cminus.l"
+#line 51 "cminus.l"
 {return TIMES;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 50 "cminus.l"
+#line 52 "cminus.l"
 {return OVER;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 51 "cminus.l"
+#line 53 "cminus.l"
 {return SEMI;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 52 "cminus.l"
+#line 54 "cminus.l"
 {return COMMA;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 53 "cminus.l"
+#line 55 "cminus.l"
 {return LPAREN;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 54 "cminus.l"
+#line 56 "cminus.l"
 {return RPAREN;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 55 "cminus.l"
+#line 57 "cminus.l"
 {return LBRACE;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 56 "cminus.l"
+#line 58 "cminus.l"
 {return RBRACE;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 57 "cminus.l"
+#line 59 "cminus.l"
 {return LCURLY;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 58 "cminus.l"
+#line 60 "cminus.l"
 {return RCURLY;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 59 "cminus.l"
+#line 61 "cminus.l"
 {return NUM;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 60 "cminus.l"
+#line 62 "cminus.l"
 {return ID;}
 	YY_BREAK
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 61 "cminus.l"
+#line 63 "cminus.l"
 {lineno++;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 62 "cminus.l"
+#line 64 "cminus.l"
 {/* skip whitespace */}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 63 "cminus.l"
+#line 65 "cminus.l"
 { char c;
                   do
                   { c = input();
@@ -938,15 +940,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 70 "cminus.l"
+#line 72 "cminus.l"
 {return ERROR;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 72 "cminus.l"
+#line 74 "cminus.l"
 ECHO;
 	YY_BREAK
-#line 950 "lex.yy.c"
+#line 952 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1951,7 +1953,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 72 "cminus.l"
+#line 74 "cminus.l"
 
 TokenType getToken(void)
 { static int firstTime = TRUE;

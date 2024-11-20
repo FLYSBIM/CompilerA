@@ -37,7 +37,7 @@ FILE * listing;
 FILE * code;
 
 /* allocate and set tracing flags */
-int EchoSource = FALSE;
+int EchoSource = TRUE;
 int TraceScan = FALSE;
 int TraceParse = TRUE;
 int TraceAnalyze = FALSE;
@@ -66,6 +66,8 @@ int main( int argc, char * argv[] )
   while (getToken()!=ENDFILE);
 #else
   syntaxTree = parse();
+  printf("ccc11111\n");
+  printf("dsads\n");
   if (TraceParse) {
     fprintf(listing,"\nSyntax tree:\n");
     printTree(syntaxTree);

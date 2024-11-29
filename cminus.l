@@ -1,66 +1,71 @@
-/****************************************************/
-/* File: cminus.l                                   */
-/* Lex specification for cminus                     */
-/* Compiler Construction: Principles and Practice   */
-/* Kenneth C. Louden                                */
-/****************************************************/
-
 %{
 #include "globals.h"
 #include "util.h"
 #include "scan.h"
-/* lexeme of identifier or reserved word */
+
 char tokenString[MAXTOKENLEN+1];
 %}
 
 digit       [0-9]
 number      {digit}+
 letter      [a-zA-Z]
-identifier  {letter}+
+identifier  {letter}({letter}|{digit})*
 newline     \n
 whitespace  [ \t]+
 
-%option noyywrap
 %%
 
-"else"          {return ELSE;}
-"if"            {return IF;}
-"int"           {return INT;}
-"return"        {return RETURN;}
+"/*"            {
+                    char c;
+                    while (1) {
+                        c = input();
+                        if (c == EOF){
+				break;
+			}
+			else if (c == '\n'){
+				lineno++;
+			}
+                        else if (c == '*') {
+                            c = input();
+                            if (c == '/') break;
+                        }
+                    }
+                }
+"int"            {return INT;}
 "void"          {return VOID;}
-"while"         {return WHILE;}
+"if"          {return IF;}
+"else"           {return ELSE;}
+"while"        {return WHILE;}
+"return"         {return RETURN;}
+"=="            {return EQ;}
+"!="             {return NE;}
+"<"             {return LT;}
+"<="             {return LE;}
+">"             {return GT;}
+">="             {return GE;}
+"="             {return ASSIGN;}
 "+"             {return PLUS;}
 "-"             {return MINUS;}
 "*"             {return TIMES;}
-"/"             {return OVER;}
-"<"             {return LT;}
-"<="            {return LTEQ;}
-">"             {return GT;}
-">="            {return GTEQ;}
-"=="            {return EQ;}
-"!="            {return NEQ;}
-"="             {return ASSIGN;}
-";"             {return SEMI;}
-","             {return COMMA;}
-"("             {return LPAREN;}
-")"             {return RPAREN;}
-"["             {return LBRACK;}
-"]"             {return RBRACK;}
-"{"             {return LBRACE;}
-"}"             {return RBRACE;}
+"/"		{return OVER;}
+";"		{return SEMI;}
+","		{return COMMA;}
+"("		{return LPAREN;}
+")"		{return RPAREN;}
+"["		{return LBRACE;}
+"]"		{return RBRACE;}
+"{"		{return LCURLY;}
+"}"		{return RCURLY;}
 {number}        {return NUM;}
 {identifier}    {return ID;}
 {newline}       {lineno++;}
 {whitespace}    {/* skip whitespace */}
-"/*"             { char c;
-                  char p='\0';
+"{"             { char c;
                   do
                   { c = input();
                     if (c == EOF) break;
                     if (c == '\n') lineno++;
-                    if (p == '*' && c == '/') break;
-                    p = c;
-                  } while (1);
+                  } while (c != '}');
                 }
 .               {return ERROR;}
 
@@ -83,4 +88,3 @@ TokenType getToken(void)
   }
   return currentToken;
 }
-//other

@@ -1,34 +1,31 @@
-	# Makefile for C-Minus
+# Makefile for C-Minus
 #
 # ./lex/tiny.l        --> ./cminus.l (from Project 1)
-# ./yacc/tiny.y       --> ./cminus.y
-# ./yacc/globals.h    --> ./globals.h
+# ./yacc/tiny.y       --> ./cminus.y (from Project 2)
+# ./yacc/globals.h    --> ./globals.h (from Project 2)
 
 CC = gcc
 
-CFLAGS = -W -Wall
+CFLAGS = -W -Wall -g
 
-OBJS = main.o util.o lex.yy.o y.tab.o
+OBJS = main.o util.o lex.yy.o y.tab.o symtab.o analyze.o
 
 .PHONY: all clean
-all: cminus_parser
+all: cminus_semantic
 
 clean:
-	rm -vf cminus_parser *.o lex.yy.c y.tab.c y.tab.h y.output
+	rm -vf cminus_semantic *.o lex.yy.c y.tab.c y.tab.h y.output
 
-cminus_parser: $(OBJS)
+cminus_semantic: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ -lfl
 
-main.o: main.c globals.h util.h scan.h parse.h y.tab.h
+main.o: main.c globals.h util.h scan.h parse.h y.tab.h analyze.h
 	$(CC) $(CFLAGS) -c main.c
 
 util.o: util.c util.h globals.h y.tab.h
 	$(CC) $(CFLAGS) -c util.c
 
-scan.o: scan.c scan.h util.h globals.h y.tab.h
-	$(CC) $(CFLAGS) -c scan.c
-
-lex.yy.o: lex.yy.c scan.h util.h globals.h y.tab.h
+lex.yy.o: lex.yy.c scan.h globals.h y.tab.h util.h
 	$(CC) $(CFLAGS) -c lex.yy.c
 
 lex.yy.c: cminus.l
@@ -41,3 +38,10 @@ y.tab.o: y.tab.c parse.h
 
 y.tab.c: cminus.y
 	yacc -d -v cminus.y
+
+analyze.o: analyze.c analyze.h globals.h y.tab.h symtab.h util.h
+	$(CC) $(CFLAGS) -c analyze.c
+
+symtab.o: symtab.c symtab.h
+	$(CC) $(CFLAGS) -c symtab.c
+

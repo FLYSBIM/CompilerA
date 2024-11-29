@@ -10,18 +10,18 @@
 /* set NO_PARSE to TRUE to get a scanner-only compiler */
 #define NO_PARSE FALSE
 /* set NO_ANALYZE to TRUE to get a parser-only compiler */
-#define NO_ANALYZE TRUE
+#define NO_ANALYZE FALSE
 
 /* set NO_CODE to TRUE to get a compiler that does not
  * generate code
  */
-#define NO_CODE FALSE
+#define NO_CODE TRUE
 
 #include "util.h"
 #if NO_PARSE
 #include "scan.h"
 #else
-#include "parse.h"
+//#include "parse.h"
 #if !NO_ANALYZE
 #include "analyze.h"
 #if !NO_CODE
@@ -37,10 +37,10 @@ FILE * listing;
 FILE * code;
 
 /* allocate and set tracing flags */
-int EchoSource = TRUE;
+int EchoSource = FALSE;
 int TraceScan = FALSE;
-int TraceParse = TRUE;
-int TraceAnalyze = FALSE;
+int TraceParse = FALSE;
+int TraceAnalyze = TRUE;
 int TraceCode = FALSE;
 
 int Error = FALSE;
@@ -61,7 +61,7 @@ int main( int argc, char * argv[] )
     exit(1);
   }
   listing = stdout; /* send listing to screen */
-  fprintf(listing,"\nTINY COMPILATION: %s\n",pgm);
+  fprintf(listing,"\nC-MINUS COMPILATION: %s\n",pgm);
 #if NO_PARSE
   while (getToken()!=ENDFILE);
 #else
@@ -72,7 +72,8 @@ int main( int argc, char * argv[] )
   }
 #if !NO_ANALYZE
   if (! Error)
-  { if (TraceAnalyze) fprintf(listing,"\nBuilding Symbol Table...\n");
+  {
+    if (TraceAnalyze) fprintf(listing,"\nBuilding Symbol Table...\n");
     buildSymtab(syntaxTree);
     if (TraceAnalyze) fprintf(listing,"\nChecking Types...\n");
     typeCheck(syntaxTree);

@@ -67,21 +67,22 @@ extern int yydebug;
     TIMES = 268,                   /* TIMES  */
     OVER = 269,                    /* OVER  */
     LT = 270,                      /* LT  */
-    LTEQ = 271,                    /* LTEQ  */
+    LE = 271,                      /* LE  */
     GT = 272,                      /* GT  */
-    GTEQ = 273,                    /* GTEQ  */
+    GE = 273,                      /* GE  */
     EQ = 274,                      /* EQ  */
-    NEQ = 275,                     /* NEQ  */
+    NE = 275,                      /* NE  */
     ASSIGN = 276,                  /* ASSIGN  */
     SEMI = 277,                    /* SEMI  */
     COMMA = 278,                   /* COMMA  */
     LPAREN = 279,                  /* LPAREN  */
     RPAREN = 280,                  /* RPAREN  */
-    LBRACK = 281,                  /* LBRACK  */
-    RBRACK = 282,                  /* RBRACK  */
-    LBRACE = 283,                  /* LBRACE  */
-    RBRACE = 284,                  /* RBRACE  */
-    ERROR = 285                    /* ERROR  */
+    LBRACE = 281,                  /* LBRACE  */
+    RBRACE = 282,                  /* RBRACE  */
+    LCURLY = 283,                  /* LCURLY  */
+    RCURLY = 284,                  /* RCURLY  */
+    ERROR = 285,                   /* ERROR  */
+    NO_ELSE = 286                  /* NO_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -103,21 +104,22 @@ extern int yydebug;
 #define TIMES 268
 #define OVER 269
 #define LT 270
-#define LTEQ 271
+#define LE 271
 #define GT 272
-#define GTEQ 273
+#define GE 273
 #define EQ 274
-#define NEQ 275
+#define NE 275
 #define ASSIGN 276
 #define SEMI 277
 #define COMMA 278
 #define LPAREN 279
 #define RPAREN 280
-#define LBRACK 281
-#define RBRACK 282
-#define LBRACE 283
-#define RBRACE 284
+#define LBRACE 281
+#define RBRACE 282
+#define LCURLY 283
+#define RCURLY 284
 #define ERROR 285
+#define NO_ELSE 286
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

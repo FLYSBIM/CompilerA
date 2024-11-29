@@ -310,13 +310,7 @@ TokenType getToken(void)
 	   if(c=='/')
 	   {
 	     state=START;
-	  //   state=DONE;
-	  //   save=FALSE;
 	   }
-	 /*  else
-	   {
-             ungetNextChar();
-	   }*/
 	 }
 	 else if(c==EOF)
 	 {
